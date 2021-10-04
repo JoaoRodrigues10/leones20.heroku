@@ -76,12 +76,13 @@ app.get('/agendamento', async (req, resp) => {
 
 app.post('/cliente', async (req, resp) => {
     try {
-        let { nome, email, senha, telefone } = req.body
+        let { nome, email, senha, imagem, telefone } = req.body
 
         let cliente = { 
             nm_nome: nome,
             ds_email: email,
             ds_senha: senha,
+            img_cliente: imagem,
             ds_telefone: telefone
         }
 
@@ -194,7 +195,7 @@ app.post('/agendamento', async (req, resp) => {
 
 app.put('/cliente/:id', async (req, resp) => {
     try {
-        let { nome, email, senha, telefone } = req.body
+        let { nome, email, senha, imagem, telefone } = req.body
 
 
         let r = await db.infod_leo_cliente.update(
@@ -202,6 +203,7 @@ app.put('/cliente/:id', async (req, resp) => {
                 nm_nome: nome,
                 ds_email: email,
                 ds_senha: senha,
+                img_cliente: imagem,
                 ds_telefone: telefone
             }, 
             {

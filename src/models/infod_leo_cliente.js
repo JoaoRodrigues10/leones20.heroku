@@ -25,6 +25,10 @@ export default class infod_leo_cliente extends Model {
     ds_telefone: {
       type: DataTypes.STRING(11),
       allowNull: true
+    },
+    img_cliente: {
+      type: DataTypes.STRING(1000),
+      allowNull: true
     }
   }, {
     sequelize,
