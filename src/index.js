@@ -60,6 +60,40 @@ app.get('/agendamento', async (req, resp) => {
     }
 })
 
+app.put('/agendamento/:id', async (req, resp) => {
+    try{
+        let { funcionario, servico, agendamento } = req.body;
+        let { id } = req.params;
+
+        let r = await db.infod_leo_agendamento.update(
+            {
+                d_funcionario: funcionario,
+                id_servico: servico,
+                dt_agendamento: agendamento,
+            },
+            {
+                where: { id_agendamento: id }
+            }
+        )
+        resp.sendStatus(200);
+    } catch (e) {
+        resp.send({ erro: e.toString() })
+    }
+})
+    
+app.delete('/agendamento/:id', async (req, resp) => {
+    try{
+        let { id } = req.params;
+    
+        let r = await db.infod_leo_agendamento.destroy({ where: { id_agendamento: id } })
+        resp.sendStatus(200);
+    } catch (e) {
+        resp.send({ erro: e.toString() })
+    }
+})
+
+
+
 
 
 
