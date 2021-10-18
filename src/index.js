@@ -360,8 +360,7 @@ app.delete('/agendamento/:id', async (req, resp) => {
 
 app.post('/enviar', async (req, resp) => {
     try {
-        const response = await
-        enviarEmail(req.body.para, req.body.assunto, req.body.mensagem);
+        const response = await enviarEmail(req.body.para, req.body.assunto, req.body.mensagem);
 
         resp.send(response);
 
