@@ -404,9 +404,7 @@ app.post('/login', async (req, resp) => {
 app.post('/esqueciASenha', async (req, resp) => {
     try {
         const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email } })
-        if (!loginusu) {
-            resp.send({ erro: 'E-mail inválido' })
-        } 
+        
 
         let codigoDeVerificacao = geradorDeNumeros(100000, 999999)
 
@@ -418,10 +416,37 @@ app.post('/esqueciASenha', async (req, resp) => {
         // )
         
 
-        enviarEmail(loginusu.ds_email, 'Aqui está o código para recuperação da sua Conta', `
-        
+        enviarEmail(req.body.email, 'Aqui está o código para recuperação da sua Conta', `
+        <head>
+        <style>
+        body {
+            
+            background-color: rgb(12, 21, 38);
+        }
+        h3 {
+            color: rgb(227, 176, 82);
+            padding-left: 7em;
+        }
+        p {
+            color: rgb(227, 176, 82);
+            padding-left: 11.5em;
+            padding-bottom: 5em;
+        }
+        img {
+            padding-left: 1.5em;
+        }
+
+        </style>
+
+        </head>
+
+        <body>
+
+        <img src="https://leonessalaodebeleza.netlify.app/assets/images/logo2.png" alt="nao foi" /> 
         <h3> Use este código para redifinir sua senha </h3>
         <p> Seu código de verificação é: <b> ${codigoDeVerificacao} </b> </p>
+
+        </body>
         `
         )
 
