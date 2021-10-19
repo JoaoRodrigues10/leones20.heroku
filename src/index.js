@@ -356,19 +356,7 @@ app.delete('/agendamento/:id', async (req, resp) => {
 
 
 
-
-
-
-app.post('/enviar', async (req, resp) => {
-    try {
-        const response = await enviarEmail(req.body.para, req.body.assunto, req.body.mensagem);
-
-        resp.send(response);
-
-    } catch(e) {
-        resp.send(e)
-    }
-})
+//email
 
 app.get('/buscarbairro', async (req, resp) => {
     try{
@@ -380,6 +368,18 @@ app.get('/buscarbairro', async (req, resp) => {
 
     } catch(e) {
         resp.send(e);
+    }
+})
+
+
+app.post('/enviar', async (req, resp) => {
+    try {
+        const response = await enviarEmail(req.body.para, req.body.assunto, req.body.mensagem);
+
+        resp.send(response);
+
+    } catch(e) {
+        resp.send(e)
     }
 })
 
