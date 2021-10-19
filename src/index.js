@@ -1,6 +1,7 @@
 import db from './db.js';
 import express from 'express'
 import cors from 'cors'
+import enviarEmail from './email.js'
 
 const app = express();
 app.use(cors());
@@ -383,6 +384,91 @@ app.get('/buscarbairro', async (req, resp) => {
 })
 
 
+
+
+app.post('/login', async (req, resp) => {
+    try {
+        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
+        if (!loginusu) {
+            resp.send({ erro: 'Credenciais inválidas' })
+        } else {
+            resp.sendStatus(200);
+        }
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+        
+    }
+})
+
+app.post('/esqueciASenha', async (req, resp) => {
+    try {
+        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email } })
+        if (!loginusu) {
+            resp.send({ erro: 'E-mail inválido' })
+        } 
+
+        let codigoDeVerificacao = geradorDeNumeros(100000, 999999)
+
+        // await db.infod_leo_cliente.uptade({
+        //     ds_codigo_verificacao: codigoDeVerificacao
+        // }, {
+        //     where: { id_cliente: longinusu.id_cliente }
+        // }
+        // )
+        
+
+        enviarEmail(loginusu.ds_email, 'Aqui está o código para recuperação da sua Conta', `
+        
+        <h3> Use este código para redifinir sua senha </h3>
+        <p> Seu código de verificação é: <b> ${codigoDeVerificacao} </b> </p>
+        `
+        )
+
+        resp.sendStatus(200)
+
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+        
+    }
+})
+
+app.post('/login', async (req, resp) => {
+    try {
+        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
+        if (!loginusu) {
+            resp.send({ erro: 'Credenciais inválidas' })
+        } else {
+            resp.sendStatus(200);
+        }
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+        
+    }
+})
+
+app.post('/login', async (req, resp) => {
+    try {
+        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
+        if (!loginusu) {
+            resp.send({ erro: 'Credenciais inválidas' })
+        } else {
+            resp.sendStatus(200);
+        }
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+        
+    }
+})
+
+
+
+function geradorDeNumeros(min, max) {
+  return Math.floor(Math.random() * (max - min) ) + min;
+}
 
 
 app.listen(process.env.PORT,
