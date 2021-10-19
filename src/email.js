@@ -14,7 +14,7 @@ const sender = nodemailer.createTransport({
 
 async function enviarEmail(para, assunto, mensagem) {
   const response = await sender.sendMail({
-    from: '"TCC INSF" <mailing.tcc.info@acaonsfatima.org.br>',
+    from: '"Empresa Leones" <mailing.tcc.info@acaonsfatima.org.br>',
     to: para, 
     subject: assunto,
     html: mensagem
