@@ -419,7 +419,8 @@ app.post('/esqueciASenha', async (req, resp) => {
         enviarEmail(req.body.email, 'Aqui está o código para recuperação da sua Conta', `
         <head>
         <style>
-        body {
+        
+        div {
             text-aling: center;
             background-color: rgb(12, 21, 38);
         }
@@ -444,11 +445,11 @@ app.post('/esqueciASenha', async (req, resp) => {
         </head>
 
         <body>
-
+        <div>
         <img src="https://leonessalaodebeleza.netlify.app/assets/images/logo2.png" alt="nao foi" /> 
         <h3> Use este código para redifinir sua senha </h3>
         <h4> Seu código de verificação é: <b> ${codigoDeVerificacao} </b> </h4>
-
+        </div>
         </body>
         `
         )
