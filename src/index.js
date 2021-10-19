@@ -420,19 +420,22 @@ app.post('/esqueciASenha', async (req, resp) => {
         <head>
         <style>
         body {
-            
+            text-aling: center;
             background-color: rgb(12, 21, 38);
         }
         h3 {
+            text-aling: center;
             color: rgb(227, 176, 82);
             padding-left: 7em;
         }
-        p {
+        h4 {
+            text-aling: center;
             color: rgb(227, 176, 82);
-            padding-left: 11.5em;
+            padding-left: 12em;
             padding-bottom: 5em;
         }
         img {
+            
             padding-left: 1.5em;
         }
 
@@ -444,7 +447,7 @@ app.post('/esqueciASenha', async (req, resp) => {
 
         <img src="https://leonessalaodebeleza.netlify.app/assets/images/logo2.png" alt="nao foi" /> 
         <h3> Use este código para redifinir sua senha </h3>
-        <p> Seu código de verificação é: <b> ${codigoDeVerificacao} </b> </p>
+        <h4> Seu código de verificação é: <b> ${codigoDeVerificacao} </b> </h4>
 
         </body>
         `
