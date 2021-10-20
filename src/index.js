@@ -41,16 +41,15 @@ app.post('/cliente', async (req, resp) => {
 
 app.put('/cliente/:id', async (req, resp) => {
     try {
-        let { nome, email, senha, imagem, telefone } = req.body
-
+        let { nome, email, senha, telefone, imagem } = req.body
 
         let r = await db.infod_leo_cliente.update(
             { 
                 nm_nome: nome,
                 ds_email: email,
                 ds_senha: senha,
-                img_cliente: imagem,
-                ds_telefone: telefone
+                ds_telefone: telefone,
+                img_cliente: imagem
             }, 
             {
                 where: { id_cliente: req.params.id }
@@ -76,6 +75,51 @@ app.delete('/cliente/:id', async (req, resp) => {
 })
 
 
+
+app.post('/login', async (req, resp) => {
+    try {
+        let { email, senha } = req.body;
+
+        let r = await db.infod_leo_cliente.findOne(
+            {
+                where: {
+                    ds_email: email,
+                    ds_senha: senha
+                },
+                raw: true
+            }
+        )
+        if (r === null) {
+            return resp.send({ erro: 'Credenciais inválidas.' })
+        }
+        delete r.ds_senha;
+        resp.send(r);
+        
+    } catch(b) {
+        resp.send({ erro: b.toString() })
+    }
+})
+
+app.post('/cadastro', async (req, resp) => {
+    try {
+        let { nome, cargo, email, telefone, senha } = req.body;
+
+        let b = await db.infod_leo_cliente.create({
+            nm_cliente: nome,
+            ds_cargo: cargo,
+            ds_email: email,
+            ds_telefone: telefone,
+            ds_senha: senha
+        })
+        if (nome === "" && cargo === "" && email === "" && telefone === "" && senha === "") {
+            return resp.send({ erro: 'Preencha todos os campos!' });
+        }
+
+        resp.send(b);
+    } catch(b) {
+        resp.send({ erro: b.toString() })
+    }
+})
 
 
 app.get('/funcionario', async (req, resp) => {
