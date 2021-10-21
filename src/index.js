@@ -537,6 +537,14 @@ app.post('/login', async (req, resp) => {
     }
 })
 
+app.put('/UploadImagemCliente/:id', async (req, resp) => {
+    try {
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+    }
+})
+
 
 
 function geradorDeNumeros(min, max) {
