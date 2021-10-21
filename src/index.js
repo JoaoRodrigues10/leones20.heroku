@@ -9,7 +9,6 @@ app.use(express.json());
 
 app.get('/cliente', async (req, resp) => {
     try {
-
         let r = await db.infod_leo_cliente.findAll({ order: [['id_cliente', 'desc']] });
         resp.send(r)
     }catch(e) {
@@ -397,6 +396,33 @@ app.delete('/agendamento/:id', async (req, resp) => {
     }
 })
 
+//login
+
+app.get('/login', async (req, resp) => {
+    try {
+        let r = await db.infod_leo_cliente.findAll({ order: [['id_cliente', 'desc']] });
+        resp.send(r)
+    }catch(e) {
+        resp.send( {erro: 'Deu erro'} );
+        console.log(e.toString());
+    }
+})
+
+app.post('/login', async (req, resp) => {
+    try {
+        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
+        if (!loginusu) {
+            resp.send({ erro: 'Credenciais inválidas' })
+        } else {
+            resp.sendStatus(200);
+        }
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+        
+    }
+})
+
 
 
 
@@ -427,28 +453,9 @@ app.post('/enviar', async (req, resp) => {
     }
 })
 
-
-
-
-app.post('/login', async (req, resp) => {
-    try {
-        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
-        if (!loginusu) {
-            resp.send({ erro: 'Credenciais inválidas' })
-        } else {
-            resp.sendStatus(200);
-        }
-
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
-        
-    }
-})
-
 app.post('/esqueciASenha', async (req, resp) => {
     try {
         const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email } })
-        
 
         let codigoDeVerificacao = geradorDeNumeros(100000, 999999)
 
@@ -497,10 +504,7 @@ app.post('/esqueciASenha', async (req, resp) => {
         </body>
         `
         )
-
         resp.sendStatus(200)
-
-
     } catch(e) {
         resp.send( {erro: e.toString() } );
         
