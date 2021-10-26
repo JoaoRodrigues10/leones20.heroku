@@ -2,6 +2,7 @@ import db from './db.js';
 import express from 'express'
 import cors from 'cors'
 import enviarEmail from './email.js'
+import multer from 'multer'
 
 const app = express();
 app.use(cors());
@@ -22,7 +23,7 @@ app.post('/cliente', async (req, resp) => {
         let { nome, email, senha, imagem, telefone } = req.body
 
         let cliente = { 
-            nm_nome: nome,
+            nm_cliente: nome,
             ds_email: email,
             ds_senha: senha,
             img_cliente: imagem,
@@ -44,7 +45,7 @@ app.put('/cliente/:id', async (req, resp) => {
 
         let r = await db.infod_leo_cliente.update(
             { 
-                nm_nome: nome,
+                nm_cliente: nome,
                 ds_email: email,
                 ds_senha: senha,
                 ds_telefone: telefone,
@@ -136,7 +137,7 @@ app.post('/funcionario', async (req, resp) => {
         let { nome, cargo, email, senha, telefone } = req.body
 
         let funcionario = { 
-            nm_nome: nome,
+            nm_funcionario: nome,
             ds_cargo: cargo,
             ds_email: email,
             ds_senha: senha,
@@ -159,7 +160,7 @@ app.put('/funcionario/:id', async (req, resp) => {
 
         let r = await db.infod_leo_funcionario.update(
             { 
-                nm_nome: nome,
+                nm_funcionario: nome,
                 ds_cargo: cargo,
                 ds_email: email,
                 ds_senha: senha,
@@ -541,13 +542,33 @@ app.post('/login', async (req, resp) => {
     }
 })
 
-app.put('/UploadImagemCliente/:id', async (req, resp) => {
-    try {
-
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+    },
+    filename: function (req, file, cb) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname))
     }
-})
+  })
+
+  const upload = multer({ storage: storage })
+
+  app.post('/criarArquivo', upload.single('arquivo'), async (req, resp) => {
+
+    const {path} = req.file;
+
+    const r = await db.infod_leo_cliente.create({
+        img_cliente: path
+    })
+    resp.send(r);
+  })
+
+
+  app.get('/criarArquivo', async (req, resp) => {
+    let dirname = path.resolve();
+    resp.sendFile(req.query.imagem, { root: path.join(dirname) });
+  })
 
 
 
