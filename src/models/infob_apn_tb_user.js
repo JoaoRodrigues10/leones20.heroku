@@ -1,26 +1,34 @@
 import _sequelize from 'sequelize';
 const { Model, Sequelize } = _sequelize;
 
-export default class infod_ssc_estoque extends Model {
+export default class infob_apn_tb_user extends Model {
   static init(sequelize, DataTypes) {
   super.init({
-    id_estoque: {
+    ID_USER: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    id_produto: {
-      type: DataTypes.INTEGER,
+    NM_USER: {
+      type: DataTypes.STRING(100),
       allowNull: true
     },
-    qtd_disponivel: {
-      type: DataTypes.INTEGER,
+    NM_SOBRENOME: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    DS_EMAIL: {
+      type: DataTypes.STRING(100),
+      allowNull: true
+    },
+    DS_SENHA: {
+      type: DataTypes.STRING(32),
       allowNull: true
     }
   }, {
     sequelize,
-    tableName: 'infod_ssc_estoque',
+    tableName: 'infob_apn_tb_user',
     timestamps: false,
     indexes: [
       {
@@ -28,18 +36,11 @@ export default class infod_ssc_estoque extends Model {
         unique: true,
         using: "BTREE",
         fields: [
-          { name: "id_estoque" },
-        ]
-      },
-      {
-        name: "id_produto",
-        using: "BTREE",
-        fields: [
-          { name: "id_produto" },
+          { name: "ID_USER" },
         ]
       },
     ]
   });
-  return infod_ssc_estoque;
+  return infob_apn_tb_user;
   }
 }
