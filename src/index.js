@@ -65,7 +65,6 @@ app.put('/cliente/:id', async (req, resp) => {
 
 app.delete('/cliente/:id', async (req, resp) => {
     try {
-
         let r = await db.infod_leo_cliente.destroy({ where: { id_cliente: req.params.id} })
         resp.sendStatus(200)
     }catch(e) {
