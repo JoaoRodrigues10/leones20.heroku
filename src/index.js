@@ -3,6 +3,7 @@ import express from 'express'
 import cors from 'cors'
 import enviarEmail from './email.js'
 import multer from 'multer'
+import path from 'path'
 
 const app = express();
 app.use(cors());
