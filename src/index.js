@@ -23,6 +23,22 @@ app.post('/cliente', async (req, resp) => {
     try {
         let { nome, email, senha, imagem, telefone } = req.body
 
+        if (nome === "" && email === "" && telefone === "" && senha === "") {
+            return resp.send({ erro: 'Preencha todos os campos!' });
+        }
+        
+        if(!isNaN(telefone) == false) {
+            return resp.send({ erro: 'No campo Telefone coloque apenas numeros!' })
+        }
+        if(telefone.length <= 10) {
+            return resp.send({ erro: 'No campo Telefone Coloque 11 Digitos' })
+        }
+        if(telefone.length > 11) {
+            return resp.send({ erro: 'No campo Telefone Coloque Apenas 11 Digitos' })
+        }
+
+
+
         let cliente = { 
             nm_cliente: nome,
             ds_email: email,
@@ -31,11 +47,18 @@ app.post('/cliente', async (req, resp) => {
             ds_telefone: telefone
         }
 
+       
+       
+        
+            
+       
+
+
         let r = await db.infod_leo_cliente.create(cliente)
         resp.send(r)
 
     }catch (e){
-        resp.send( {erro: 'Deu erro'} );
+        resp.send({ erro: e.toString() })
         console.log(e.toString());
     }
 })
@@ -114,6 +137,8 @@ app.post('/cadastro', async (req, resp) => {
         if (nome === "" && cargo === "" && email === "" && telefone === "" && senha === "") {
             return resp.send({ erro: 'Preencha todos os campos!' });
         }
+
+        
 
         resp.send(b);
     } catch(b) {
