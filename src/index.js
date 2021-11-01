@@ -331,7 +331,26 @@ app.delete('/servicoimg/:id', async (req, resp) => {
 
 app.get('/agendamento', async (req, resp) => {
     try {
-        let r = await db.infod_leo_agendamento.findAll({ order: [['id_agendamento', 'desc']] });
+        let r = await db.infod_leo_agendamento.findAll({ 
+            include: [
+                {
+                    model: db.infod_leo_cliente,
+                    as: 'id_cliente_infod_leo_cliente',
+                    required: true
+                },
+                {
+                    model: db.infod_leo_servico,
+                    as: 'id_servico_infod_leo_servico',
+                    required: true
+                },
+                {
+                    model: db.infod_leo_funcionario,
+                    as: 'id_funcionario_infod_leo_funcionario',
+                    required: true
+                }
+            ],
+            order: [['id_agendamento', 'desc']] 
+        });
         resp.send(r)
     }catch(e) {
         resp.send( {erro: 'Deu erro'} );
