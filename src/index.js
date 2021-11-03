@@ -38,7 +38,6 @@ app.post('/cliente', async (req, resp) => {
         }
 
 
-
         let cliente = { 
             nm_cliente: nome,
             ds_email: email,
@@ -51,7 +50,6 @@ app.post('/cliente', async (req, resp) => {
        
         
             
-       
 
 
         let r = await db.infod_leo_cliente.create(cliente)
