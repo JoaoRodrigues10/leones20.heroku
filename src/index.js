@@ -451,20 +451,6 @@ app.get('/login', async (req, resp) => {
     }
 })
 
-app.post('/login', async (req, resp) => {
-    try {
-        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
-        if (!loginusu) {
-            resp.send({ erro: 'Credenciais inválidas' })
-        } else {
-            resp.sendStatus(200);
-        }
-
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
-        
-    }
-})
 
 
 
@@ -484,6 +470,22 @@ app.get('/buscarbairro', async (req, resp) => {
     }
 })
 
+app.post('/login', async (req, resp) => {
+    try {
+        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
+        if (!loginusu) {
+            resp.send({ erro: 'Credenciais inválidas' })
+        } else {
+            resp.sendStatus(200);
+        }
+
+    } catch(e) {
+        resp.send( {erro: e.toString() } );
+        
+    }
+})
+
+
 
 app.post('/enviar', async (req, resp) => {
     try {
@@ -502,12 +504,12 @@ app.post('/esqueciASenha', async (req, resp) => {
 
         let codigoDeVerificacao = geradorDeNumeros(100000, 999999)
 
-        // await db.infod_leo_cliente.uptade({
-        //     ds_codigo_verificacao: codigoDeVerificacao
-        // }, {
-        //     where: { id_cliente: longinusu.id_cliente }
-        // }
-        // )
+        await db.infod_leo_cliente.uptade({
+             ds_codigo_verificacao: codigoDeVerificacao
+         }, {
+             where: { id_cliente: longinusu.id_cliente }
+         }
+         )
         
 
         enviarEmail(req.body.email, 'Aqui está o código para recuperação da sua Conta', `
@@ -554,35 +556,55 @@ app.post('/esqueciASenha', async (req, resp) => {
     }
 })
 
-app.post('/login', async (req, resp) => {
-    try {
-        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
-        if (!loginusu) {
-            resp.send({ erro: 'Credenciais inválidas' })
-        } else {
-            resp.sendStatus(200);
-        }
-
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
-        
+app.post('/validarCodigo', async (req, resp) => {
+    const user = await db.infod_leo_cliente.findOne({
+      where: {
+        ds_email: req.body.email   
+      }
+    });
+  
+    if (!user) {
+      resp.send({ status: 'erro', mensagem: 'E-mail inválido.' });
     }
-})
-
-app.post('/login', async (req, resp) => {
-    try {
-        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
-        if (!loginusu) {
-            resp.send({ erro: 'Credenciais inválidas' })
-        } else {
-            resp.sendStatus(200);
-        }
-
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
-        
+  
+    if (user.ds_codigo_rec !== req.body.codigo) {
+      resp.send({ status: 'erro', mensagem: 'Código inválido.' });
     }
-})
+  
+    resp.send({ status: 'ok', mensagem: 'Código validado.' });
+  
+  })
+
+  app.put('/resetSenha', async (req, resp) => {
+    const user = await db.infod_leo_cliente.findOne({
+      where: {
+        ds_email: req.body.email   
+      }
+    });
+  
+    if (!user) {
+      resp.send({ status: 'erro', mensagem: 'E-mail inválido.' });
+    }
+  
+  
+    if (user.ds_codigo_rec !== req.body.codigo ||
+        user.ds_codigo_rec === '') {
+      resp.send({ status: 'erro', mensagem: 'Código inválido.' });
+    }
+  
+    await db.insf_tb_usuario.update({
+      ds_senha: req.body.novaSenha,
+      ds_codigo_rec: ''
+    }, {
+      where: { id_usuario: user.id_cliente }
+    })
+  
+    resp.send({ status: 'ok', mensagem: 'Senha alterada.' });
+  })
+  
+  
+
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
