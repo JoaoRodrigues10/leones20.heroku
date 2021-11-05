@@ -1,3 +1,9 @@
+import clienteController from './controller/clienteCrontroller.js'
+import agendamentoController from '.controller/agendamentoController.js'
+import emailController from '.controller/emailController.js'
+import funcionarioController from '.controller/funcionarioController.js'
+
+
 import db from './db.js';
 import express from 'express'
 import cors from 'cors'
