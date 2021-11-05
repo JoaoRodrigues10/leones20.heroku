@@ -1,7 +1,9 @@
 import clienteController from './controller/clienteCrontroller.js'
-import agendamentoController from '.controller/agendamentoController.js'
-import emailController from '.controller/emailController.js'
-import funcionarioController from '.controller/funcionarioController.js'
+import agendamentoController from './controller/agendamentoController.js'
+import emailController from './controller/emailController.js'
+import funcionarioController from './controller/funcionarioController.js'
+import loginController from './controller/loginController.js'
+import servicosController from './controller/servicosController.js'
 
 
 import db from './db.js';
