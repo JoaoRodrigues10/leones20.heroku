@@ -499,15 +499,18 @@ app.post('/enviar', async (req, resp) => {
 })
 
 app.post('/esqueciASenha', async (req, resp) => {
-    try {
+    
         const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email } })
 
+        if (!loginusu) {
+            resp.send({ status: 'erro', mensagem: 'E-mail inválido.' });
+          }
         let codigoDeVerificacao = geradorDeNumeros(100000, 999999)
 
-        await db.infod_leo_cliente.uptade({
-             ds_codigo_verificacao: codigoDeVerificacao
+        await db.infod_leo_cliente.update({
+            ds_codigo_rec: codigoDeVerificacao
          }, {
-             where: { id_cliente: longinusu.id_cliente }
+             where: { id_cliente: loginusu.id_cliente }
          }
          )
         
@@ -535,6 +538,9 @@ app.post('/esqueciASenha', async (req, resp) => {
             
             padding-left: 1.5em;
         }
+        b {
+            color: white;
+        }
 
         </style>
 
@@ -549,11 +555,7 @@ app.post('/esqueciASenha', async (req, resp) => {
         </body>
         `
         )
-        resp.sendStatus(200)
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
-        
-    }
+        resp.send({ status: 'ok' });
 })
 
 app.post('/validarCodigo', async (req, resp) => {
@@ -592,11 +594,11 @@ app.post('/validarCodigo', async (req, resp) => {
       resp.send({ status: 'erro', mensagem: 'Código inválido.' });
     }
   
-    await db.insf_tb_usuario.update({
+    await db.infod_leo_cliente.update({
       ds_senha: req.body.novaSenha,
       ds_codigo_rec: ''
     }, {
-      where: { id_usuario: user.id_cliente }
+      where: { id_cliente: user.id_cliente }
     })
   
     resp.send({ status: 'ok', mensagem: 'Senha alterada.' });
