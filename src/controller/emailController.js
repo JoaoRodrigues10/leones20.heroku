@@ -1,8 +1,7 @@
-import multer from 'multer'
-import path from 'path'
-import express from 'express'
+import db from '../db.js'
 
-const Router = express.Router;
+import express from 'express'
+const Router = express.Router
 const app = Router ();
 
 app.get('/buscarbairro', async (req, resp) => {
@@ -32,7 +31,6 @@ app.post('/login', async (req, resp) => {
         
     }
 })
-
 
 
 app.post('/enviar', async (req, resp) => {
@@ -151,43 +149,5 @@ app.post('/validarCodigo', async (req, resp) => {
   
     resp.send({ status: 'ok', mensagem: 'Senha alterada.' });
   })
-  
-  
-
-
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, 'uploads/')
-    },
-    filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname))
-    }
-  })
-
-  const upload = multer({ storage: storage })
-
-  app.post('/criarArquivo', upload.single('arquivo'), async (req, resp) => {
-
-    const {path} = req.file;
-
-    const r = await db.infod_leo_cliente.create({
-        img_cliente: path
-    })
-    resp.send(r);
-  })
-
-
-  app.get('/criarArquivo', async (req, resp) => {
-    let dirname = path.resolve();
-    resp.sendFile(req.query.imagem, { root: path.join(dirname) });
-  })
-
-
-
-function geradorDeNumeros(min, max) {
-  return Math.floor(Math.random() * (max - min) ) + min;
-}
 
 export default app;

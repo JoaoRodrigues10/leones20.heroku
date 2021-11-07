@@ -1,10 +1,11 @@
+import db from '../db.js'
+
 import express from 'express'
-const Router = express.Router;
+const Router = express.Router
 const app = Router ();
 
 
-
-app.post('/login', async (req, resp) => {
+app.post('/', async (req, resp) => {
     try {
         let { email, senha } = req.body;
 
@@ -29,8 +30,7 @@ app.post('/login', async (req, resp) => {
 })
 
 
-
-app.get('/login', async (req, resp) => {
+app.get('/', async (req, resp) => {
     try {
         let r = await db.infod_leo_cliente.findAll({ order: [['id_cliente', 'desc']] });
         resp.send(r)

@@ -1,9 +1,11 @@
+import db from '../db.js'
+
 import express from 'express'
-const Router = express.Router;
+const Router = express.Router
 const app = Router ();
 
 
-app.get('/cliente', async (req, resp) => {
+app.get('/', async (req, resp) => {
     try {
         let r = await db.infod_leo_cliente.findAll({ order: [['id_cliente', 'desc']] });
         resp.send(r)
@@ -13,24 +15,22 @@ app.get('/cliente', async (req, resp) => {
     }
 })
 
-app.post('/cliente', async (req, resp) => {
+app.post('/', async (req, resp) => {
     try {
         let { nome, email, senha, imagem, telefone } = req.body
 
         if (nome === "" && email === "" && telefone === "" && senha === "") {
             return resp.send({ erro: 'Preencha todos os campos!' });
         }
-        
         if(!isNaN(telefone) == false) {
             return resp.send({ erro: 'No campo Telefone coloque apenas numeros!' })
         }
         if(telefone.length <= 10) {
-            return resp.send({ erro: 'No campo Telefone Coloque 11 Digitos' })
+            return resp.send({ erro: 'No campo Telefone Coloque 11 Digitos!' })
         }
         if(telefone.length > 11) {
             return resp.send({ erro: 'No campo Telefone Coloque Apenas 11 Digitos' })
         }
-
 
         let cliente = { 
             nm_cliente: nome,
@@ -39,7 +39,6 @@ app.post('/cliente', async (req, resp) => {
             img_cliente: imagem,
             ds_telefone: telefone
         }
-
 
         let r = await db.infod_leo_cliente.create(cliente)
         resp.send(r)
@@ -50,10 +49,11 @@ app.post('/cliente', async (req, resp) => {
     }
 })
 
-app.put('/cliente/:id', async (req, resp) => {
+app.put('/:id', async (req, resp) => {
     try {
         let { nome, email, senha, telefone, imagem } = req.body
 
+        const {id} = req.params;
         let r = await db.infod_leo_cliente.update(
             { 
                 nm_cliente: nome,
@@ -63,7 +63,7 @@ app.put('/cliente/:id', async (req, resp) => {
                 img_cliente: imagem
             }, 
             {
-                where: { id_cliente: req.params.id }
+                where: { id_cliente: id }
             }
         )
         resp.sendStatus(200)
@@ -74,15 +74,16 @@ app.put('/cliente/:id', async (req, resp) => {
     }
 })
 
-app.delete('/cliente/:id', async (req, resp) => {
+app.delete('/:id', async (req, resp) => {
     try {
-        let r = await db.infod_leo_cliente.destroy({ where: { id_cliente: req.params.id} })
+
+        const {id} = req.params;
+        let r = await db.infod_leo_cliente.destroy({ where: { id_cliente: id} })
         resp.sendStatus(200)
     }catch(e) {
         resp.send( {erro: 'Deu erro'} );
         console.log(e.toString());
     }
 })
-
 
 export default app;

@@ -1,10 +1,11 @@
+import db from '../db.js'
+
 import express from 'express'
-const Router = express.Router;
+const Router = express.Router
 const app = Router ();
 
 
-
-app.get('/servicos', async (req, resp) => {
+app.get('/', async (req, resp) => {
     try {
 
         let r = await db.infod_leo_servico.findAll({ order: [['id_servico', 'desc']] });
@@ -15,7 +16,7 @@ app.get('/servicos', async (req, resp) => {
     }
 })
 
-app.post('/servicos', async (req, resp) => {
+app.post('/', async (req, resp) => {
     try {
         let { tipo, nome, descricao, valor } = req.body
 
@@ -35,12 +36,11 @@ app.post('/servicos', async (req, resp) => {
     }
 })
 
-app.put('/servicos/:id', async (req, resp) => {
+app.put('/:id', async (req, resp) => {
     try {
         let { tipo, nome, descricao, valor } = req.body
 
         
-
 
         let r = await db.infod_leo_servico.update(
             { 
@@ -61,7 +61,7 @@ app.put('/servicos/:id', async (req, resp) => {
     }
 })
 
-app.delete('/servicos/:id', async (req, resp) => {
+app.delete('/:id', async (req, resp) => {
     try {
 
         let r = await db.infod_leo_servico.destroy({ where: { id_servico: req.params.id} })
@@ -71,7 +71,6 @@ app.delete('/servicos/:id', async (req, resp) => {
         console.log(e.toString());
     }
 })
-
 
 app.get('/servicoimg', async (req, resp) => {
     try {

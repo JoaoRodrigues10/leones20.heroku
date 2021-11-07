@@ -1,10 +1,12 @@
+import db from '../db.js'
+
 import express from 'express'
-const Router = express.Router;
+const Router = express.Router
 const app = Router ();
 
 
 
-app.get('/funcionario', async (req, resp) => {
+app.get('/', async (req, resp) => {
     try {
         let r = await db.infod_leo_funcionario.findAll({ order: [['id_funcionario', 'desc']] });
         resp.send(r)
@@ -14,7 +16,7 @@ app.get('/funcionario', async (req, resp) => {
     }
 })
 
-app.post('/funcionario', async (req, resp) => {
+app.post('/', async (req, resp) => {
     try {
         let { nome, cargo, email, senha, telefone } = req.body
 
@@ -35,10 +37,9 @@ app.post('/funcionario', async (req, resp) => {
     }
 })
 
-app.put('/funcionario/:id', async (req, resp) => {
+app.put('/:id', async (req, resp) => {
     try {
         let { nome, cargo, email, senha, telefone } = req.body
-
 
         let r = await db.infod_leo_funcionario.update(
             { 
@@ -60,7 +61,7 @@ app.put('/funcionario/:id', async (req, resp) => {
     }
 })
 
-app.delete('/funcionario/:id', async (req, resp) => {
+app.delete('/:id', async (req, resp) => {
     try {
 
         let r = await db.infod_leo_funcionario.destroy({ where: { id_funcionario: req.params.id} })

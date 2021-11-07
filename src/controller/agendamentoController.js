@@ -1,11 +1,10 @@
+import db from '../db.js'
+
 import express from 'express'
-const Router = express.Router;
+const Router = express.Router
 const app = Router ();
 
-
-
-
-app.get('/agendamento', async (req, resp) => {
+app.get('/', async (req, resp) => {
     try {
         let r = await db.infod_leo_agendamento.findAll({ 
             include: [
@@ -34,7 +33,7 @@ app.get('/agendamento', async (req, resp) => {
     }
 })
 
-app.post('/agendamento', async (req, resp) => {
+app.post('/', async (req, resp) => {
     try {
         let { idfuncionario, idcliente, idservico, data, situacao} = req.body
 
@@ -56,7 +55,7 @@ app.post('/agendamento', async (req, resp) => {
     }
 })
 
-app.put('/agendamento/:id', async (req, resp) => {
+app.put('/:id', async (req, resp) => {
     try {
 
         let { idfuncionario, idcliente, idservico, data, situacao} = req.body
@@ -81,7 +80,7 @@ app.put('/agendamento/:id', async (req, resp) => {
     }
 }) 
 
-app.delete('/agendamento/:id', async (req, resp) => {
+app.delete('/:id', async (req, resp) => {
     try {
 
         let r = await db.infod_leo_agendamento.destroy({ where: { id_agendamento: req.params.id} })
@@ -91,6 +90,5 @@ app.delete('/agendamento/:id', async (req, resp) => {
         console.log(e.toString());
     }
 })
-
 
 export default app;
