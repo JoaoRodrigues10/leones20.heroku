@@ -630,20 +630,13 @@ const storage = multer.diskStorage({
 
   const upload = multer({ storage: storage })
 
-  app.put('/criarArquivo', upload.single('arquivo'), async (req, resp) => {
-    const user = await db.infod_leo_cliente.findOne({
-        where: {
-          ds_email: req.body.email   
-        }
-      });
+  app.post('/criarArquivo', upload.single('arquivo'), async (req, resp) => {
 
 
     const {path} = req.file;
 
-    const r = await db.infod_leo_cliente.update({
+    const r = await db.infod_leo_cliente.create({
         img_cliente: path
-      }, {
-        where: { id_cliente: user.id_cliente }
       })
 
     
