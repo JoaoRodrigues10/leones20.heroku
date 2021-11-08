@@ -33,6 +33,21 @@ app.post('/cliente', async (req, resp) => {
             ds_telefone: telefone
         }
 
+        
+            if(!isNaN(telefone) == false) {
+                return resp.send({ erro: 'No campo Telefone coloque apenas numeros!' })
+            }
+            
+            if(telefone.length > 11) {
+                return resp.send({ erro: 'No campo Telefone Coloque Apenas 11 Digitos' })
+            }
+
+            let p = await db.infod_leo_cliente.findOne({where: { ds_email: email } } );
+        
+            if(p != null ){
+                return resp.send({ erro: 'Email já cadastrado' })
+             }
+
         let r = await db.infod_leo_cliente.create(cliente)
         resp.send(r)
 
