@@ -22,21 +22,12 @@ app.post('/', async (req, resp) => {
         if (nome === "" && email === "" && telefone === "" && senha === "") {
             return resp.send({ erro: 'Preencha todos os campos!' });
         }
-        if(!isNaN(telefone) == false) {
-            return resp.send({ erro: 'No campo Telefone coloque apenas numeros!' })
-        }
-        if(telefone.length <= 10) {
-            return resp.send({ erro: 'No campo Telefone Coloque 11 Digitos!' })
-        }
-        if(telefone.length > 11) {
-            return resp.send({ erro: 'No campo Telefone Coloque Apenas 11 Digitos' })
-        }
 
         let cliente = { 
             nm_cliente: nome,
             ds_email: email,
             ds_senha: senha,
-            img_cliente: imagem,
+            img_cliente: "https://leonessalaodebeleza.netlify.app/assets/images/fotousu.png",
             ds_telefone: telefone
         }
 
