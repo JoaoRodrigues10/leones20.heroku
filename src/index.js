@@ -119,22 +119,24 @@ app.post('/login', async (req, resp) => {
 
 app.post('/cadastro', async (req, resp) => {
     try {
-        let { nome, cargo, email, telefone, senha } = req.body;
+        let { email, cargo, senha } = req.body;
 
-        let b = await db.infod_leo_cliente.create({
-            nm_cliente: nome,
-            ds_cargo: cargo,
-            ds_email: email,
-            ds_telefone: telefone,
-            ds_senha: senha
-        })
-        if (nome === "" && cargo === "" && email === "" && telefone === "" && senha === "") {
-            return resp.send({ erro: 'Preencha todos os campos!' });
+        let r = await db.infod_leo_funcionario.findOne(
+            {
+                where: {
+                    ds_email: email,
+                    ds_cargo: cargo,
+                    ds_senha: senha
+                },
+                raw: true
+            }
+        )
+        if (r === null) {
+            return resp.send({ erro: 'Credenciais inválidas.' })
         }
+        delete r.ds_senha;
+        resp.send(r);
 
-
-
-        resp.send(b);
     } catch(b) {
         resp.send({ erro: b.toString() })
     }
@@ -160,8 +162,24 @@ app.post('/funcionario', async (req, resp) => {
             ds_cargo: cargo,
             ds_email: email,
             ds_senha: senha,
-            ds_telefone: telefone
+            ds_telefone: telefone,
+            img_funcionario: "https://leonessalaodebeleza.netlify.app/assets/images/fotousu.png"
         }
+
+
+        if(!isNaN(telefone) == false) {
+            return resp.send({ erro: 'No campo Telefone coloque apenas numeros!' })
+        }
+        
+        if(telefone.length > 11) {
+            return resp.send({ erro: 'No campo Telefone Coloque Apenas 11 Digitos' })
+        }
+
+        let p = await db.infod_leo_funcionario.findOne({where: { ds_email: email } } );
+    
+        if(p != null ){
+            return resp.send({ erro: 'Email já cadastrado' })
+         }
 
         let r = await db.infod_leo_funcionario.create(funcionario)
         resp.send(r)
@@ -626,8 +644,26 @@ const storage = multer.diskStorage({
     resp.send(r);
   })
 
+  app.post('/criarArquivo2', upload.single('arquivo'), async (req, resp) => {
+
+
+    const {path} = req.file;
+
+    const r = await db.infod_leo_funcionario.create({
+        img_cliente: path
+      })
+
+
+    resp.send(r);
+  })
+
 
   app.get('/criarArquivo', async (req, resp) => {
+    let dirname = path.resolve();
+    resp.sendFile(req.query.imagem, { root: path.join(dirname) });
+  })
+
+  app.get('/criarArquivo2', async (req, resp) => {
     let dirname = path.resolve();
     resp.sendFile(req.query.imagem, { root: path.join(dirname) });
   })
