@@ -192,7 +192,7 @@ app.post('/funcionario', async (req, resp) => {
 
 app.put('/funcionario/:id', async (req, resp) => {
     try {
-        let { nome, cargo, email, senha, telefone } = req.body
+        let { nome, cargo, email, senha, telefone, imagem } = req.body
 
 
         let r = await db.infod_leo_funcionario.update(
@@ -201,7 +201,8 @@ app.put('/funcionario/:id', async (req, resp) => {
                 ds_cargo: cargo,
                 ds_email: email,
                 ds_senha: senha,
-                ds_telefone: telefone
+                ds_telefone: telefone,
+                img_funcionario: imagem
             }, 
             {
                 where: { id_funcionario: req.params.id }
@@ -631,39 +632,49 @@ const storage = multer.diskStorage({
 
   const upload = multer({ storage: storage })
 
-  app.post('/criarArquivo', upload.single('arquivo'), async (req, resp) => {
-
-
+  app.put('/criarArquivo', upload.single('arquivo'), async (req, resp) => {
+    const {id} = req.query;
     const {path} = req.file;
 
-    const r = await db.infod_leo_cliente.create({
+    
+
+    const r = await db.infod_leo_cliente.update(
+    {
         img_cliente: path
-      })
+    }, 
+    {
+        where: { id_cliente: id }
+    });
 
-
-    resp.send(r);
+    resp.send({img_cliente: path});
   })
 
-  app.post('/criarArquivo2', upload.single('arquivo'), async (req, resp) => {
+  
 
-
+  app.put('/criarArquivo2', upload.single('arquivo'), async (req, resp) => {
+    const {id} = req.query;
     const {path} = req.file;
 
-    const r = await db.infod_leo_funcionario.create({
-        img_cliente: path
-      })
+    
 
+    const r = await db.infod_leo_funcionario.update(
+    {
+        img_funcionario: path
+    }, 
+    {
+        where: { id_funcionario: id }
+    });
 
-    resp.send(r);
+    resp.send({img_funcionario: path});
   })
 
 
-  app.get('/criarArquivo', async (req, resp) => {
+  app.get('/imagemPerfil', async (req, resp) => {
     let dirname = path.resolve();
     resp.sendFile(req.query.imagem, { root: path.join(dirname) });
   })
 
-  app.get('/criarArquivo2', async (req, resp) => {
+  app.get('/imagemPerfil2', async (req, resp) => {
     let dirname = path.resolve();
     resp.sendFile(req.query.imagem, { root: path.join(dirname) });
   })
