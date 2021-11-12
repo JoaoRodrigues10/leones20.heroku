@@ -242,6 +242,25 @@ app.get('/servicos', async (req, resp) => {
     }
 })
 
+app.get('/servico', async (req, resp) => {
+    try {
+        let { nome } = req.body;
+
+        let r = await db.infod_leo_servico.findOne(
+            {
+                where: {
+                    nm_servico: nome
+                }
+            }
+        )
+        
+        resp.send(r);
+    }catch(e) {
+        resp.send( {erro: 'Deu erro'} );
+        console.log(e.toString());
+    }
+})
+
 app.post('/servicos', async (req, resp) => {
     try {
         let { tipo, nome, descricao, valor } = req.body
