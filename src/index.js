@@ -261,6 +261,25 @@ app.get('/servico', async (req, resp) => {
     }
 })
 
+app.get('/tabela', async (req, resp) => {
+    try {
+        let { idusu } = req.body;
+
+        let r = await db.infod_leo_agendamento.findAll(
+            {
+                where: {
+                    id_cliente: idusu
+                }
+            }
+        )
+        
+        resp.send(r);
+    }catch(e) {
+        resp.send( {erro: 'Deu erro'} );
+        console.log(e.toString());
+    }
+})
+
 app.post('/servicos', async (req, resp) => {
     try {
         let { tipo, nome, descricao, valor } = req.body
