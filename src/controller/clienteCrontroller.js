@@ -17,7 +17,7 @@ app.get('/', async (req, resp) => {
 
 app.post('/', async (req, resp) => {
     try {
-        let { nome, email, senha, imagem, telefone } = req.body
+        let { nome, email, senha, telefone } = req.body
 
         if (nome === "" && email === "" && telefone === "" && senha === "") {
             return resp.send({ erro: 'Preencha todos os campos!' });
@@ -30,6 +30,20 @@ app.post('/', async (req, resp) => {
             img_cliente: "https://leonessalaodebeleza.netlify.app/assets/images/fotousu.png",
             ds_telefone: telefone
         }
+        
+        if(!isNaN(telefone) == false) {
+            return resp.send({ erro: 'No campo Telefone coloque apenas numeros!' })
+        }
+        
+        if(telefone.length > 11) {
+            return resp.send({ erro: 'No campo Telefone Coloque Apenas 11 Digitos' })
+        }
+
+        let p = await db.infod_leo_cliente.findOne({where: { ds_email: email } } );
+    
+        if(p != null ){
+            return resp.send({ erro: 'Email já cadastrado' })
+         }
 
         let r = await db.infod_leo_cliente.create(cliente)
         resp.send(r)
@@ -44,7 +58,6 @@ app.put('/:id', async (req, resp) => {
     try {
         let { nome, email, senha, telefone, imagem } = req.body
 
-        const {id} = req.params;
         let r = await db.infod_leo_cliente.update(
             { 
                 nm_cliente: nome,
@@ -54,7 +67,7 @@ app.put('/:id', async (req, resp) => {
                 img_cliente: imagem
             }, 
             {
-                where: { id_cliente: id }
+                where: { id_cliente: req.params.id }
             }
         )
         resp.sendStatus(200)
@@ -67,9 +80,7 @@ app.put('/:id', async (req, resp) => {
 
 app.delete('/:id', async (req, resp) => {
     try {
-
-        const {id} = req.params;
-        let r = await db.infod_leo_cliente.destroy({ where: { id_cliente: id} })
+        let r = await db.infod_leo_cliente.destroy({ where: { id_cliente: req.params.id} })
         resp.sendStatus(200)
     }catch(e) {
         resp.send( {erro: 'Deu erro'} );

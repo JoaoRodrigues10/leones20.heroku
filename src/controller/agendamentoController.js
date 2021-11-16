@@ -35,14 +35,14 @@ app.get('/', async (req, resp) => {
 
 app.post('/', async (req, resp) => {
     try {
-        let { idfuncionario, idcliente, idservico, data, situacao} = req.body
+        let { idfuncionario, idcliente, idservico, data} = req.body
 
         let agendamentos = {
             id_funcionario: idfuncionario,
             id_cliente: idcliente,
             id_servico: idservico,
             dt_agendamento: data,
-            tp_situacao: situacao
+            tp_situacao: "Em análise"
             
         }
 
