@@ -1,4 +1,5 @@
 import db from '../db.js'
+import enviarEmail from '../email.js'
 
 import express from 'express'
 const Router = express.Router
@@ -14,21 +15,6 @@ app.get('/buscarbairro', async (req, resp) => {
 
     } catch(e) {
         resp.send(e);
-    }
-})
-
-app.post('/login', async (req, resp) => {
-    try {
-        const loginusu = await db.infod_leo_cliente.findOne({ where: { ds_email: req.body.email, ds_senha: req.body.senha } })
-        if (!loginusu) {
-            resp.send({ erro: 'Credenciais inválidas' })
-        } else {
-            resp.sendStatus(200);
-        }
-
-    } catch(e) {
-        resp.send( {erro: e.toString() } );
-        
     }
 })
 
@@ -149,5 +135,9 @@ app.post('/validarCodigo', async (req, resp) => {
   
     resp.send({ status: 'ok', mensagem: 'Senha alterada.' });
   })
+
+  function geradorDeNumeros(min, max) {
+    return Math.floor(Math.random() * (max - min) ) + min;
+  }
 
 export default app;
