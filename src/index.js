@@ -360,12 +360,13 @@ app.get('/agendamento', async (req, resp) => {
 })
 app.post('/agendamento', async (req, resp) => {
     try {
-        let { idfuncionario, idcliente, idservico, data } = req.body
+        let { funcionario, cliente, servico, agendamento } = req.body
+        console.log(req.body)
         let agendamentos = {
-            id_funcionario: idfuncionario,
-            id_cliente: idcliente,
-            id_servico: idservico,
-            dt_agendamento: data,
+            id_funcionario: funcionario,
+            id_cliente: cliente,
+            id_servico: servico,
+            dt_agendamento: agendamento,
             tp_situacao: "Em análise"
         }
         let r = await db.infod_leo_agendamento.create(agendamentos)
