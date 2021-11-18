@@ -65,6 +65,41 @@ app.get('/:id', async (req, resp) => {
     }
 })
 
+app.get('/disponivel', async (req, resp) => {
+    try {
+        let { horario } = req.body
+        let r = await db.infod_leo_agendamento.findOne({ 
+            where: { '$dt_agendamento_infod_leo_agendamento$': horario },
+            include: [
+                {
+                    model: db.infod_leo_cliente,
+                    as: 'id_cliente_infod_leo_cliente',
+                    required: true,
+
+                },
+                {
+                    model: db.infod_leo_servico,
+                    as: 'id_servico_infod_leo_servico',
+                    required: true
+                },
+                {
+                    model: db.infod_leo_funcionario,
+                    as: 'id_funcionario_infod_leo_funcionario',
+                    required: true
+                }
+            ],
+            order: [['id_agendamento', 'desc']], 
+        },
+    );
+    resp.send(r)
+
+    }catch(e) {
+        resp.send( {erro: 'Deu erro'} );
+        console.log(e.toString());
+    }
+})
+
+
 app.get('/funcionario/:id', async (req, resp) => {
     try {
         let r = await db.infod_leo_agendamento.findAll({ 
