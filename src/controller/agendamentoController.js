@@ -157,24 +157,57 @@ app.post('/', async (req, resp) => {
 app.put('/:id', async (req, resp) => {
     try {
 
-        let { idfuncionario, idcliente, idservico, data, situacao} = req.body
+        let { funcionario, cliente, servico, agendamento, situacao} = req.body
+
+        
 
         let r = await db.infod_leo_agendamento.update(
             {
-                id_funcionario: idfuncionario,
-                id_cliente: idcliente,
-                id_servico: idservico,
-                dt_agendamento: data,
+                id_funcionario: funcionario,
+                id_cliente: cliente,
+                id_servico: servico,
+                dt_agendamento: agendamento,
                 tp_situacao: situacao
             }, 
             {
                 where: { id_agendamento: req.params.id }
             }
         )
+
         resp.sendStatus(200)
 
-    }catch (e){
-        resp.send( {erro: 'Deu erro'} );
+    }catch (e) {
+        resp.send({ erro: e.toString() })
+        console.log(e.toString());
+    }
+}) 
+
+app.put('/v2/:id', async (req, resp) => {
+    try {
+
+        let { funcionario, cliente, servico, agendamento, situacao} = req.body
+
+        if(situacao !== "Em análise") {
+            return resp.send({ erro: 'Não é possivel mudar a situação' })
+        }
+
+        let r = await db.infod_leo_agendamento.update(
+            {
+                id_funcionario: funcionario,
+                id_cliente: cliente,
+                id_servico: servico,
+                dt_agendamento: agendamento,
+                tp_situacao: situacao
+            }, 
+            {
+                where: { id_agendamento: req.params.id }
+            }
+        )
+
+        resp.sendStatus(200)
+
+    }catch (e) {
+        resp.send({ erro: e.toString() })
         console.log(e.toString());
     }
 }) 
